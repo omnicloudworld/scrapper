@@ -1,0 +1,61 @@
+stages:
+    -   build
+    -   deploy
+
+
+build-job:
+    stage:  build
+    image:  python:3.10-slim
+    only:
+        refs:
+            -   main
+            -   dev
+    environment:
+        name:   GitLab
+        action: prepare
+    variables:
+        include: pypi/vars-ci.yml
+    script:
+        -   if [[ "$CI_COMMIT_REF_NAME" == "main" ]]; then export BUILD_SUFIX=""; else export BUILD_SUFIX="dev"; fi;
+        -   pip3 install --upgrade pip wheel build pyyaml markdown;
+        -   python3 -m build --no-isolation .;
+    artifacts:
+        paths:
+            -   dist/
+
+
+deploy2gitlab:
+    stage:  deploy
+    image:  python:3.10-slim
+    environment:
+        name:   GitLab
+    allow_failure:  false
+    only:
+        refs:
+            -   dev
+            -   stage
+    script:
+    -   pip3 install twine
+    -   TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python3 -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+
+
+
+
+deploy2pypi:
+    stage:  deploy
+    image:  python:3.10-slim
+    environment:
+        name:   GitLab
+        deployment_tier: production
+        action: start
+    allow_failure:  false
+    only:
+        refs:
+            -   main
+    script:
+        -   pip3 install twine
+        -   >
+            python3 -m twine upload --verbose
+            --repository-url https://upload.pypi.org/legacy/ 
+            --username __token__ 
+            --password $PYPIORG_TOKEN dist/*

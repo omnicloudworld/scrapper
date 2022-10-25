@@ -1,0 +1,6 @@
+[MASTER]
+extension-pkg-allow-list=pydantic
+disable=logging-fstring-interpolation
+
+[FORMAT]
+max-line-length=110

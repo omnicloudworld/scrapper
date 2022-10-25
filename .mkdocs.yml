@@ -1,0 +1,71 @@
+site_name: Fields SkyANT
+
+docs_dir: .docs
+repo_url: https://gitlab.com/skyant/scrapping/fields
+repo_name: skyant/scrapping/fields
+edit_uri: ""
+
+theme: 
+    name: material
+    favicon: https://skyant.dev/assets/icons/558614-512-3.png
+    logo: https://skyant.dev/assets/icons/558614.svg
+    palette:
+        primary: amber
+        accent: deep purple
+    font:
+        text: Montserrat
+        code: Roboto Mono
+    icon:
+        repo: fontawesome/brands/gitlab
+    features:
+        - search.highlight
+        - search.suggest
+        - navigation.tabs
+        - navigation.tabs.sticky
+
+extra:
+    generator: true
+    homepage: https://skyant.dev
+
+    social:
+        
+        - icon: fontawesome/solid/sack-dollar
+          link: https://buymeacoffee.com/skyantdev
+          name: Donate us
+        
+        - icon: fontawesome/brands/twitter
+          link: https://twitter.com/skyantdev
+          name: SkyANT on Twitter
+
+        - icon: fontawesome/solid/comment
+          link: https://gitter.com/skyantdev/fields
+
+
+
+extra_css:
+    - https://skyant.dev/static/css/skyant.css
+
+
+plugins:
+    - mkdocstrings:
+        handlers:
+            python:
+                options:
+                    show_source: true
+                    show_root_full_path: false
+                    show_root_toc_entry: true
+                    show_bases: false
+                    show_category_heading: false
+    - search:
+        indexing: 'full'
+
+
+nav:
+
+    - 'HOME': index.md
+    - 'QUICK START': start.md
+
+    - 'REFERENCES':
+        
+        - 'Loader': 'references/loader.md'
+        - 'Fields': 'references/fields.md'
