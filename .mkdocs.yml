@@ -1,8 +1,24 @@
-site_name: Fields SkyANT
+
+nav:
+
+    - 'HOME': index.md
+    - 'QUICK START': start.md
+
+    - 'REFERENCES':
+        
+        - 'Loader': 'references/loader.md'
+        - 'Fields': 'references/fields.md'
+
+
+
+site_name: skyant.scrapper
+repo_url: https://gitlab.com/skyant/python/scrapper
+repo_name: skyant/python/scrapper
+
+
+
 
 docs_dir: .docs
-repo_url: https://gitlab.com/skyant/scrapping/fields
-repo_name: skyant/scrapping/fields
 edit_uri: ""
 
 theme: 
@@ -23,6 +39,8 @@ theme:
         - navigation.tabs
         - navigation.tabs.sticky
 
+
+copyright: Copyright &copy; 2020 Iurii Tarasenko
 extra:
     generator: true
     homepage: https://skyant.dev
@@ -31,19 +49,21 @@ extra:
         
         - icon: fontawesome/solid/sack-dollar
           link: https://buymeacoffee.com/skyantdev
-          name: Donate us
+          name: donation
         
-        - icon: fontawesome/brands/twitter
-          link: https://twitter.com/skyantdev
-          name: SkyANT on Twitter
+        - icon: fontawesome/brands/linkedin
+          link: https://www.linkedin.com/company/skyantdev
+          name: news
 
-        - icon: fontawesome/solid/comment
-          link: https://gitter.com/skyantdev/fields
-
+        - icon: fontawesome/solid/user-group
+          link: https://groups.google.com/a/skyant.dev/g/community?label=scrapper
+          name: community
 
 
 extra_css:
     - https://skyant.dev/static/css/skyant.css
+    - https://skyant.dev/static/css/hide-title.css
+    - https://skyant.dev/static/css/hide-versions.css
 
 
 plugins:
@@ -56,16 +76,5 @@ plugins:
                     show_root_toc_entry: true
                     show_bases: false
                     show_category_heading: false
-    - search:
-        indexing: 'full'
-
-
-nav:
-
-    - 'HOME': index.md
-    - 'QUICK START': start.md
-
-    - 'REFERENCES':
-        
-        - 'Loader': 'references/loader.md'
-        - 'Fields': 'references/fields.md'
+    - search
+    - section-index
