@@ -9,6 +9,7 @@ from os import (
 from shutil import rmtree
 from duty import duty
 import yaml
+import json
 
 
 @duty
@@ -72,6 +73,19 @@ def gauth(ctx):
         title='Set project'
     )
 
+@duty
+def requirements(ctx):
+    '''
+    Install development requirements & package requirements
+    '''
+
+    with open('./setup.yml', 'r', encoding='utf-8') as vars_file:
+        req = ' '.join(yaml.safe_load(vars_file)['REQUIREMENTS'])
+
+    ctx.run('pip3 install --upgrade pip', title='Upgrading pip')
+    ctx.run(f'pip3 install --upgrade {req}', title='Installing package requirements')
+    ctx.run('pip3 freeze > .venv/dev.pip', title='Upgrading dev.pip')
+
 
 @duty
 def devinit(ctx):
@@ -81,5 +95,26 @@ def devinit(ctx):
 
     ctx.run('python3.10 -m venv .venv/dev', title='Make venv')
     ctx.run('. .venv/dev/bin/activate', title='Activate')
-    ctx.run('pip3 install --upgrade pip', title='Upgrade pip')
-    ctx.run('pip3 install --upgrade -r .venv/dev.pip', title='Installing requirements')
+    requirements(ctx)
+
+
+@duty
+def devupgrade(ctx):
+    '''
+    Full upgrade current environment
+    '''
+
+    ctx.run('pip3 install --upgrade pip', title='Upgrading pip')
+    ctx.run('pip3 install --upgrade -r .venv/dev.pip', title='Installing current requirements')
+
+    out_json = ctx.run(
+        'pip3 --disable-pip-version-check list --outdated --format=json',
+        title='Getting outdated'
+    )
+    out_str = " ".join([x["name"] for x in json.loads(out_json)])
+
+    if len(out_str.strip()) > 0:
+        ctx.run(f'pip3 install --upgrade {out_str}', title='Upgrading all')
+        ctx.run('pip3 freeze > .venv/dev.pip', title='Upgrading dev.pip file')
+    else:
+        print('You have actually packages.')

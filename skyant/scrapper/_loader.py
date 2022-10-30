@@ -1,4 +1,6 @@
-# pylint: disable=missing-docstring
+# pylint: disable=missing-module-docstring
+
+from __future__ import annotations
 
 import logging as log
 import time
@@ -22,6 +24,16 @@ from webdriver_manager.chrome import ChromeDriverManager
 @unique
 class Method(Enum):
     '''
+    Enumerator represents methods for interaction with a web page during loading.
+    The class provides three method now:
+
+    - MOUSE - simulate a mouse click on the target element
+
+    - ENTER - simulate a pressing an enter when the target element in the focus
+
+    - SPACE - simulate a pressing a space when the target element in the focus
+
+    This class is callable and serializable both methods revert a value field.
     '''
 
     MOUSE = 'mouse'
@@ -37,6 +49,41 @@ class Method(Enum):
 
 class Loader(ABC):
     '''
+    Abstract class for making a selenium based web page loader.
+    Inherited loader will be done next actions during construction an instance:
+
+    1. load page by url
+
+    2. if needed, click on notification banner such as ad or cookies banner
+
+    3. if needed, click on some buttons or links
+
+    4. wait to load some page element
+
+    The instance of this class is a callable which return a lxml.html.HtmlElement.
+
+
+    **Class Properties:**
+
+    | Name | Type | Description | Default |
+    | ---- | ---- | ----------- | ------- |
+    | options | Options[^1] | Options for running instance of chrome | footnote[^2] |
+    | timeout | int | Timeout for waiting an answer from server; seconds | 3 |
+    | denotificators | List of tuples | `(Method, Xpath)` for hide banners ||
+    | thereare | List of strings | List of Xpath selectors which need to be on the page ||
+    | click | List of tuples | `(Method, N, Xpath)` for interaction N-times with element ||
+    | width | int | Window width in pixels | 1920 |
+    | height | int | Window height in pixels | 1080 |
+    | chromepath | string | Path to the binary file of Google Chrome| /usr/bin/google-chrome-stable |
+
+    ??? warning "Check path to Google Chrome in your system"
+        Default value of the attribute "chromepath" respond to default installation path in
+        linux system. Please verify this path or use [our runner](/projects/cloudrun)
+
+    [^1]: `selenium.webdriver.chrome.options.Options`
+    [^2]:
+        `start-maximized --enable-features="AllowAllCookies --no-sandbox --disable-dev-shm-usage
+        --disable-default-apps --headless --window-size 1920,1080`
     '''
 
     options: ClassVar[Options]
@@ -45,8 +92,8 @@ class Loader(ABC):
     thereare: ClassVar[list[str]]
     click: ClassVar[list[tuple[Method, int, str]]]
 
-    width: str = '1920'
-    height: str = '1080'
+    width: int = 1920
+    height: int = 1080
     chromepath: str = '/usr/bin/google-chrome-stable'
 
     def __init_subclass__(cls, **kw):
@@ -159,7 +206,7 @@ class Loader(ABC):
                     if confirmed_pages == 0:
                         log.info(ex)
                         log.warning(
-                            f'Click on {element} from the page {self._url} was be stoped with exception!'
+                            f'Click on {element} from the page {self._url} was be stopped with exception!'
                         )
                     elif confirmed_pages > 0 and confirmed_pages < count:
                         log.info(
@@ -212,14 +259,25 @@ class Loader(ABC):
 
     @property
     def driver(self) -> webdriver.Chrome:
+        '''
+        Returns:
+            Instance of webdriver.Chrome with the target page.
+        '''
         return self._driver
 
     @property
     def html(self) -> str:
+        '''
+        Returns:
+            Page content as a string.
+        '''
         return self.driver.page_source
 
-    def __call__(self):
+    def __call__(self) -> html.HtmlElement:
         return html.fromstring(self.html)
 
     def quit(self):
+        '''
+        Destroyed webdriver.
+        '''
         self.driver.quit()

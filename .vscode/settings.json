@@ -2,7 +2,7 @@
     "gitlens.autolinks": [
         {
             "prefix": "#",
-            "url": "https://gitlab.com/skyant/data/datager/-/issues/<num>"
+            "url": "https://gitlab.com/skyant/python/scrapper/-/issues/<num>"
         }
     ],
     "autoDocstring.quoteStyle": "'''",
@@ -12,8 +12,7 @@
     "python.envFile": "${workspaceFolder}/.env",
 
     "terminal.integrated.env.linux": {
-        "PYTHONPATH": "${workspaceFolder}:${PYTHONPATH}",
-        "WORKDIR": "${workspaceFolder}"
+        "PYTHONPATH": "${workspaceFolder}"
     },
     "terminal.integrated.profiles.linux": {
         "local": {
@@ -25,6 +24,19 @@
             ]
         }
     },
-    "terminal.integrated.defaultProfile.linux": "local"
+    "terminal.integrated.defaultProfile.linux": "local",
+    "cSpell.language": "en,en-GB,uk,lorem",
+    "cSpell.words": [
+        "chromepath",
+        "denotificator",
+        "denotificators",
+        "devinit",
+        "devupgrade",
+        "envupgrade",
+        "mkdocstrings",
+        "pipupgrade",
+        "pymdownx",
+        "thereare"
+    ]
 
 }

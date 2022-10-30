@@ -5,7 +5,7 @@ nav:
     - 'QUICK START': start.md
 
     - 'REFERENCES':
-        
+        - references/index.md
         - 'Loader': 'references/loader.md'
         - 'Fields': 'references/fields.md'
 
@@ -78,3 +78,10 @@ plugins:
                     show_category_heading: false
     - search
     - section-index
+
+markdown_extensions:
+  - tables
+  - footnotes
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
