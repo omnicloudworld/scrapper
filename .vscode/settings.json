@@ -27,7 +27,9 @@
     "terminal.integrated.defaultProfile.linux": "local",
     "cSpell.language": "en,en-GB,uk,lorem",
     "cSpell.words": [
+        "autocorrection",
         "chromepath",
+        "datamap",
         "denotificator",
         "denotificators",
         "devinit",
@@ -35,7 +37,9 @@
         "envupgrade",
         "mkdocstrings",
         "pipupgrade",
+        "pydantic",
         "pymdownx",
+        "reffbook",
         "thereare"
     ]
 

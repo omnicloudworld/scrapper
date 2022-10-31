@@ -9,11 +9,23 @@ from typing import ClassVar
 
 from lxml import html
 from pydantic import BaseModel
+
+from . import e
 from .. import Field, Loader
 
 
 class ItemPage(ABC):
     '''
+    This objects loads the item page & orchestrate fields processing
+
+    **Class Properties:**
+
+    | Name | Type | Description |
+    | ---- | ---- | ----------- |
+    | Child | skyant.parser.Field | Field that defines the URL to item page |
+    | Loader | skyant.parser.Loader | Loader for the item page |
+    | datamap | dict | Dictionary as a template for making the parsed data |
+    | Adept | pydantic.BaseModel | BaseModel or inherited object for validating data |
     '''
 
     Child: ClassVar[Field]
@@ -24,18 +36,18 @@ class ItemPage(ABC):
     def __init_subclass__(cls, **kw):
 
         assert issubclass(cls.Child, Field), \
-            'The atribute "Child" must be a string!'
+            'The attribute "Child" must be a string!'
 
         assert issubclass(cls.Loader, Loader), \
-            'The atribute "Loader" must be a SeleniumLoader or SimpleLoader instance!'
+            'The attribute "Loader" must be a SeleniumLoader or SimpleLoader instance!'
 
         assert isinstance(cls.datamap, dict), \
-            'The atribute "datamap" must be a dictionary!'
-        ItemPage._field_validator(cls.datamap)
+            'The attribute "datamap" must be a dictionary!'
+        ItemPage._datamap_validator(cls.datamap)
 
         if hasattr(cls, 'Adept'):
             assert issubclass(cls.Adept, BaseModel), \
-                'The atribute "Adept" must be a BaseModel instance!'
+                'The attribute "Adept" must be a BaseModel instance!'
         else:
             cls.Adept = None
 
@@ -47,6 +59,14 @@ class ItemPage(ABC):
         datamap: dict = None,
         **kw
     ):
+        '''
+        Args:
+            parent: The source of item card from the search page
+            datamap: A dictionary of Fields
+
+        Raises:
+            WrongBase64: If source contains a string that is not a valid base64
+        '''
 
         self._data = datamap if datamap else deepcopy(self.datamap)
         self.driver = Loader.driver
@@ -55,7 +75,7 @@ class ItemPage(ABC):
             try:
                 parent = html.fromstring(b64d(parent).decode())
             except Exception as ex:
-                raise RuntimeError('Parent decoding error') from ex
+                raise e.WrongBase64(self.__class__.__name__) from ex
 
         assert isinstance(parent, html.HtmlElement), \
             'Argument "parent" must be lxml.html.HtmlElement or it dump as base64!'
@@ -77,7 +97,13 @@ class ItemPage(ABC):
         super().__init__(**kw)
 
     @staticmethod
-    def _field_validator(data):
+    def _datamap_validator(data):
+        '''
+        The validator of datamap dictionary
+
+        Args:
+            data: datamap dictionary
+        '''
 
         for key, field in data.items():
 
@@ -86,9 +112,18 @@ class ItemPage(ABC):
                     f'The class in field {key} of datamap must has an attribute "source"!'
 
             if isinstance(field, dict):
-                ItemPage._field_validator(field)
+                ItemPage._datamap_validator(field)
 
     def _processing(self, data):
+        '''
+        The handler for processing the item page base on the datamap
+
+        Args:
+            data: The datamap or them part
+
+        Returns:
+            Scrapped data
+        '''
 
         for key, field in data.items():
 
@@ -109,10 +144,14 @@ class ItemPage(ABC):
         return data
 
     @property
-    def adept(self) -> BaseModel:
+    def model(self) -> BaseModel:
+        '''
+        Returns:
+            A pydantic.BaseModel used to validate the data
+        '''
         return self._adept
 
     def __call__(self) -> dict:
         if hasattr(self, '_bad_data') and self._bad_data:
             return None
-        return self.adept.json() if self.adept else self._data
+        return self.model.json() if self.model else self._data

@@ -3,12 +3,14 @@ nav:
 
     - 'HOME': index.md
     - 'QUICK START': start.md
+    - 'LOADER': 'loader.md'
+    - 'FIELD': 'field.md'
 
-    - 'REFERENCES':
-        - references/index.md
-        - 'Loader': 'references/loader.md'
-        - 'Fields': 'references/fields.md'
-
+    - 'CATALOG':
+        - catalog/index.md
+        - 'Search Page': catalog/search.md
+        - 'Item Page': catalog/item.md
+        - 'Router': catalog/router.md
 
 
 site_name: skyant.scrapper

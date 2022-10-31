@@ -1,43 +1,47 @@
 # pylint: disable=missing-docstring
 
+from __future__ import annotations
+
 import logging as log
 from abc import ABC
-from enum import Enum as _Enum
 from typing import ClassVar
+from enum import Enum
 
 from lxml import html
 
 
-def normalizer(origin: str, reffbook: dict) -> str:
-    '''
-    '''
-
-    for key, value in reffbook.items():
-
-        if not isinstance(value, list):
-            raise ValueError('Reffbook\'s value must be a list!')
-
-        value.append(key)
-        if origin in value:
-            return key
-
-    return origin
-
-
-class SelectSource(_Enum):
-    '''
-    '''
-
-    PARENT = 'parent'
-    CHILD = 'child'
-
-
 class Field(ABC):
     '''
+    The abstract class for defining a single entity of data that should be extracted from a web.
+
+    Inherited classes will be extracted data from provided source.
+    Defining a subclass you have to provide Xpath selectors which will be used to extract data.
+
+    As a source for processing must be send single lxml.html.HtmlElement or dictionary of more them.
+    If source will be a dictionary the class property "source" musty be defined.
+
+    The Field class provides features for autocorrection extracted data. For example you can
+    automatically replace "км/г" or "км/г" with km/h. For this feature you must only provide an
+    autocorrection dictionary.
+
+    Xpath selectors reverts an array, but the Field by default revert a single value from array. If
+    you want to get a full array please set attribute array to True.
+
+    Also the Field provides the solution for injection custom python code to prepare an
+    extracted data. For this reason please define your own parser method.
+
+    **Class Properties:**
+
+    | Name | Type | Description | Default |
+    | ---- | ---- | ----------- | ------- |
+    | selectors | list of strings | Array of Xpath strings; all string will be joined using OR operator ||
+    | source | enumerator of strings | Enumerator element which defines target key in source tree ||
+    | autocorrection | dictionary from lists of strings | The dictionary for normalize string ||
+    | array | bool | Flag for marks data as array | False |
     '''
 
     selectors: ClassVar[list[str]]
-    source: ClassVar[SelectSource]
+    source: ClassVar[Enum]
     autocorrection: ClassVar[dict]
     array: ClassVar[bool] = False
 
@@ -53,15 +57,15 @@ class Field(ABC):
         cls._selector = ' | '.join(cls.selectors)
 
         if hasattr(cls, 'source'):
-            assert isinstance(cls.source, SelectSource), \
-                'The "source" argument must be a "SelectSource" property!'
+            assert isinstance(cls.source, Enum), \
+                'The "source" argument must be a Enum!'
 
         if hasattr(cls, 'autocorrection'):
             assert isinstance(cls.autocorrection, dict), 'The autocorrection argument should be a dictionary!'
 
             for key, value in cls.autocorrection.items():
                 assert isinstance(value, list), \
-                    f'The "autocorrection" argument should contain lista as values!\nPlease fix {key}!'
+                    f'The "autocorrection" argument should contain list as values!\nPlease fix {key}!'
                 for i in value:
                     assert isinstance(i, str), \
                         f'The "autocorrection" argument should contain a list of string!\nPlease fix {key}: {i}!'  # pylint: disable=line-too-long
@@ -74,6 +78,13 @@ class Field(ABC):
         **kw
     ):
         '''
+        Instance constructor
+
+        Args:
+            tree: lxml.html.HtmlElement or dict from them; dictionary requires the class attribute source
+
+        Raises:
+            ValueError: if tree is a dictionary but source is not defined in the class
         '''
 
         if isinstance(tree, dict):
@@ -103,18 +114,65 @@ class Field(ABC):
         super().__init__(**kw)
 
     def parser(self):
+        '''
+        The stub of parser; current procedure return original data from self.parser; you can
+        recreate this method if you want to use own logic
+        '''
         return self.content
 
+    def normalizer(self, origin: str) -> str:
+        '''
+        Processor for normalizing strings; the origin string will be replaced by the normalized value from
+        the dictionary.
+
+        ```json title="example of reffbook:"
+        {
+            "normalized value 1": [
+                "1. variant 1",
+                "1. variant 2"
+            ],
+            "normalized value 2": [
+                "2. variant 1",
+                "2. variant 2"
+            ]
+        }
+        ```
+
+        Args:
+            origin: The string to normalize
+            reffbook: A dictionary with the data for normalization strings
+
+        Raises:
+            ValueError: If reffbook contains invalid value of element
+
+        Returns:
+            The normalized string
+        '''
+
+        for key, value in self.autocorrection.items():
+
+            if not isinstance(value, list):
+                raise ValueError('Reffbook\'s value must be a list!')
+
+            value.append(key)
+            if origin in value:
+                return key
+
+        return origin
+
     def __call__(self):
+        '''
+        Runner for getting and normalizing the data
+        '''
 
         try:
             data = self.parser()
             if hasattr(self, 'autocorrection'):
                 if isinstance(data, str):
-                    data = normalizer(data, self.autocorrection)
+                    data = self.normalizer(data)
                 elif isinstance(data, list):
                     data = [
-                        normalizer(i, self.autocorrection) if isinstance(i, str) else i for i in data
+                        self.normalizer(i) if isinstance(i, str) else i for i in data
                     ]
 
         except Exception as ex:  # pylint: disable=broad-except

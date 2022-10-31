@@ -22,7 +22,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 @unique
-class Method(Enum):
+class _Interaction(Enum):
     '''
     Enumerator represents methods for interaction with a web page during loading.
     The class provides three method now:
@@ -69,9 +69,9 @@ class Loader(ABC):
     | ---- | ---- | ----------- | ------- |
     | options | Options[^1] | Options for running instance of chrome | footnote[^2] |
     | timeout | int | Timeout for waiting an answer from server; seconds | 3 |
-    | denotificators | List of tuples | `(Method, Xpath)` for hide banners ||
+    | denotificators | List of tuples | `(Loader.Interaction, Xpath)` for hide banners ||
     | thereare | List of strings | List of Xpath selectors which need to be on the page ||
-    | click | List of tuples | `(Method, N, Xpath)` for interaction N-times with element ||
+    | click | List of tuples | `(Loader.Interaction, N, Xpath)` for interaction N-times with element ||
     | width | int | Window width in pixels | 1920 |
     | height | int | Window height in pixels | 1080 |
     | chromepath | string | Path to the binary file of Google Chrome| /usr/bin/google-chrome-stable |
@@ -88,9 +88,9 @@ class Loader(ABC):
 
     options: ClassVar[Options]
     timeout: ClassVar[int] = 3
-    denotificators: ClassVar[list[tuple[Method, str]]]
+    denotificators: ClassVar[list[tuple[Loader.Interaction, str]]]
     thereare: ClassVar[list[str]]
-    click: ClassVar[list[tuple[Method, int, str]]]
+    click: ClassVar[list[tuple[Loader.Interaction, int, str]]]
 
     width: int = 1920
     height: int = 1080
@@ -119,7 +119,12 @@ class Loader(ABC):
 
     def _denotificators_(self, driver: WebDriver):
         '''
+        Processor for hide notification banners
+
+        Args:
+            driver: The webdriver for processing in it
         '''
+        # TODO: To refactor for using self.driver instead of argument
 
         free_timeout = self.timeout
         for method, element in self.denotificators:
@@ -128,17 +133,17 @@ class Loader(ABC):
 
             try:
 
-                if method == Method.MOUSE:
+                if method == Loader.Interaction.MOUSE:
                     WebDriverWait(driver, free_timeout).until(
                         EC.element_to_be_clickable(('xpath', element))
                     ).click()
 
-                elif method == Method.ENTER:
+                elif method == Loader.Interaction.ENTER:
                     WebDriverWait(driver, free_timeout).until(
                         EC.element_to_be_clickable(('xpath', element))
                     ).send_keys(Keys.ENTER)
 
-                elif method == Method.SPACE:
+                elif method == Loader.Interaction.SPACE:
                     WebDriverWait(driver, free_timeout).until(
                         EC.element_to_be_clickable(('xpath', element))
                     ).send_keys(Keys.SPACE)
@@ -156,7 +161,15 @@ class Loader(ABC):
 
     def _thereare_(self, driver: WebDriver):
         '''
+        Waiter for getting target elements
+
+        Args:
+            driver: The webdriver for processing in it
+
+        Raises:
+            TimeoutError: If target elements didn't got
         '''
+        # TODO: To refactor for using self.driver instead of argument
 
         free_timeout = self.timeout
         for element in self.thereare:
@@ -170,7 +183,12 @@ class Loader(ABC):
 
     def _click_(self, driver: WebDriver):
         '''
+        The processor for clicking to elements in click attribute
+
+        Args:
+            driver: The webdriver for processing in it
         '''
+        # TODO: To refactor for using self.driver instead of argument
 
         free_timeout = self.timeout
         for method, count, element in self.click:
@@ -183,17 +201,17 @@ class Loader(ABC):
 
                 try:
 
-                    if method == Method.MOUSE:
+                    if method == Loader.Interaction.MOUSE:
                         WebDriverWait(driver, free_timeout).until(
                             EC.element_to_be_clickable(('xpath', element))
                         ).click()
 
-                    elif method == Method.ENTER:
+                    elif method == Loader.Interaction.ENTER:
                         WebDriverWait(driver, free_timeout).until(
                             EC.element_to_be_clickable(('xpath', element))
                         ).send_keys(Keys.ENTER)
 
-                    elif method == Method.SPACE:
+                    elif method == Loader.Interaction.SPACE:
                         WebDriverWait(driver, free_timeout).until(
                             EC.element_to_be_clickable(('xpath', element))
                         ).send_keys(Keys.SPACE)
@@ -225,6 +243,10 @@ class Loader(ABC):
         url: str,
         **kw
     ):
+        '''
+        Args:
+            url: The URL for make an instance from it
+        '''
 
         self._url = url
 
@@ -261,7 +283,7 @@ class Loader(ABC):
     def driver(self) -> webdriver.Chrome:
         '''
         Returns:
-            Instance of webdriver.Chrome with the target page.
+            Instance of webdriver.Chrome with the target page
         '''
         return self._driver
 
@@ -269,7 +291,7 @@ class Loader(ABC):
     def html(self) -> str:
         '''
         Returns:
-            Page content as a string.
+            Page content as a string
         '''
         return self.driver.page_source
 
@@ -278,6 +300,25 @@ class Loader(ABC):
 
     def quit(self):
         '''
-        Destroyed webdriver.
+        Destroyed webdriver
         '''
         self.driver.quit()
+
+    @classmethod
+    @property
+    def Interaction(cls) -> _Interaction:  # pylint: disable=invalid-name
+        '''
+        Provide an enum of possible interaction methods for loading web page
+
+        Currently support:
+
+        - MOUSE - for mouse click
+
+        - ENTER - for press enter
+
+        - SPACE - for press space
+
+        Returns:
+            The enum object
+        '''
+        return _Interaction
