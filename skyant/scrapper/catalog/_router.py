@@ -14,6 +14,16 @@ from ._search import SearchPage
 
 
 class Router(ABC):
+    '''
+    Select a module depending on a url; the module have to contains CatalogLoader, ItemLoader,
+    ItemPage & CatalogPage objects.
+
+    **Class Properties:**
+
+    | Name | Type | Description |
+    | ---- | ---- | ----------- |
+    | variants | list of tuples | (re.pattern, module); if url matches to pattern then module will be used |
+    '''
 
     variants: ClassVar[
         list[tuple[re.Pattern, ModuleType]]
@@ -51,6 +61,13 @@ class Router(ABC):
         return super().__init_subclass__(**kw)
 
     def __init__(self, url: str, **kw):
+        '''
+        Args:
+            url: The url of web page
+
+        Raises:
+            RuntimeError: If url matches nothing patterns
+        '''
 
         assert url_validator(url), 'The argument "url" should be a valid URL!'
         self.url = url
@@ -69,40 +86,45 @@ class Router(ABC):
                 break
 
         if not found:
-            raise RuntimeError('')
+            raise RuntimeError(f'Router hasn\'t module for url {url}')
 
         super().__init__(**kw)
 
     @property
     def CatalogLoader(self) -> Loader:  # pylint: disable=invalid-name
         '''
+        Returns:
+            The skyant.parser.Loader for loading the catalog page
         '''
-
         return self._CatalogLoader
 
     @property
     def CatalogPage(self) -> SearchPage:  # pylint: disable=invalid-name
         '''
+        Returns:
+            The skyant.parser.SearchPage for handling the catalog page
         '''
-
         return self._CatalogPage
 
     @property
     def ItemLoader(self) -> Loader:  # pylint: disable=invalid-name
         '''
+        Returns:
+            The skyant.parser.Loader for loading the item page
         '''
-
         return self._ItemLoader
 
     @property
     def ItemPage(self) -> ItemPage:  # pylint: disable=invalid-name
         '''
+        Returns:
+            The skyant.parser.ItemPage for handling the item page
         '''
-
         return self._ItemPage
 
     def get_catalog(self) -> SearchPage:
         '''
+        Returns:
+            The list of data from the catalog
         '''
-
         return self.CatalogPage(self.url)
