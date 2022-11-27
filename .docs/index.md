@@ -6,6 +6,9 @@ hide:
 ---
 
 
-# SCRAPPER
+#
 
-::: skyant.scrapper
+{%
+   include-markdown "../README.md"
+   heading-offset=1
+%}

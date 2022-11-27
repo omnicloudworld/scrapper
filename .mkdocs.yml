@@ -10,34 +10,9 @@ nav:
         - 'Fields': 'references/fields.md'
 
 
-
 site_name: skyant.scrapper
 repo_url: https://gitlab.com/skyant/python/scrapper
 repo_name: skyant/python/scrapper
-
-
-
-
-docs_dir: .docs
-edit_uri: ""
-
-theme: 
-    name: material
-    favicon: https://skyant.dev/assets/icons/558614-512-3.png
-    logo: https://skyant.dev/assets/icons/558614.svg
-    palette:
-        primary: amber
-        accent: deep purple
-    font:
-        text: Montserrat
-        code: Roboto Mono
-    icon:
-        repo: fontawesome/brands/gitlab
-    features:
-        - search.highlight
-        - search.suggest
-        - navigation.tabs
-        - navigation.tabs.sticky
 
 
 copyright: Copyright &copy; 2020 Iurii Tarasenko
@@ -60,6 +35,36 @@ extra:
           name: community
 
 
+
+###
+#  Template
+###
+
+
+docs_dir: .docs
+edit_uri: ""
+
+
+theme: 
+    name: material
+    favicon: https://skyant.dev/assets/icons/558614-512-3.png
+    logo: https://skyant.dev/assets/icons/558614.svg
+    palette:
+        primary: amber
+        accent: deep purple
+    font:
+        text: Montserrat
+        code: Roboto Mono
+    icon:
+        repo: fontawesome/brands/gitlab
+    features:
+        - search.highlight
+        - search.suggest
+        - navigation.tabs
+        - content.code.annotate
+        - content.tabs.link
+
+
 extra_css:
     - https://skyant.dev/static/css/skyant.css
     - https://skyant.dev/static/css/hide-title.css
@@ -73,8 +78,28 @@ plugins:
                 options:
                     show_source: true
                     show_root_full_path: false
-                    show_root_toc_entry: true
+                    show_root_toc_entry: false
                     show_bases: false
                     show_category_heading: false
     - search
     - section-index
+    - glightbox
+    - include-markdown
+
+
+markdown_extensions:
+    - pymdownx.highlight:
+        anchor_linenums: true
+    - pymdownx.inlinehilite
+    - pymdownx.snippets
+    - pymdownx.superfences
+    - admonition
+    - pymdownx.details
+    - footnotes
+    - attr_list
+    - pymdownx.tabbed:
+        alternate_style: true 
+    - md_in_html
+    - def_list
+    - pymdownx.tasklist:
+        custom_checkbox: true
