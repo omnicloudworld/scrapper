@@ -49,6 +49,9 @@ deploy2pypi:
     only:
         refs:
             -   main
+        changes:
+            -   setup.yml
+
     script:
         -   pip3 install twine
         -   >

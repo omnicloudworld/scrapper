@@ -19,6 +19,9 @@ copyright: Copyright &copy; 2020 Iurii Tarasenko
 extra:
     generator: true
     homepage: https://skyant.dev
+    analytics:
+        provider: google
+        property: G-TQL7NWWCK3
 
     social:
         
