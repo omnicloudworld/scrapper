@@ -15,28 +15,6 @@ repo_url: https://gitlab.com/skyant/python/scrapper
 repo_name: skyant/python/scrapper
 
 
-copyright: Copyright &copy; 2020 Iurii Tarasenko
-extra:
-    generator: true
-    homepage: https://skyant.dev
-    analytics:
-        provider: google
-        property: G-TQL7NWWCK3
-
-    social:
-        
-        - icon: fontawesome/solid/sack-dollar
-          link: https://buymeacoffee.com/skyantdev
-          name: donation
-        
-        - icon: fontawesome/brands/linkedin
-          link: https://www.linkedin.com/company/skyantdev
-          name: news
-
-        - icon: fontawesome/solid/user-group
-          link: https://groups.google.com/a/skyant.dev/g/community?label=scrapper
-          name: community
-
 
 
 ###
@@ -48,10 +26,37 @@ docs_dir: .docs
 edit_uri: ""
 
 
+extra:
+
+    generator: true
+    homepage: https://skyant.dev
+    analytics:
+        provider: google
+        property: G-1R41YK6WT2
+
+    social:
+        
+        - icon: fontawesome/brands/square-facebook
+          link: https://facebook.com/skyantdev
+          name: facebook
+        
+        - icon: fontawesome/brands/linkedin
+          link: https://www.linkedin.com/company/skyantdev
+          name: linkedin
+
+        - icon: fontawesome/brands/square-twitter
+          link: https://twitter.com/skyantdev
+          name: twitter
+
+        - icon: fontawesome/solid/house
+          link: https://skyant.dev
+          name: home
+
+
 theme: 
     name: material
-    favicon: https://skyant.dev/assets/icons/558614-512-3.png
-    logo: https://skyant.dev/assets/icons/558614.svg
+    favicon: https://static.skyant.dev/common/img/icons/ant-512.drawio.png
+    logo: https://static.skyant.dev/common/img/icons/ant-512.drawio.png
     palette:
         primary: amber
         accent: deep purple
@@ -69,9 +74,9 @@ theme:
 
 
 extra_css:
-    - https://skyant.dev/static/css/skyant.css
-    - https://skyant.dev/static/css/hide-title.css
-    - https://skyant.dev/static/css/hide-versions.css
+    - https://static.skyant.dev/common/css/mkdocs/skyant.css
+    - https://static.skyant.dev/common/css/mkdocs/hide-title.css
+    - https://static.skyant.dev/common/css/mkdocs/hide-versions.css
 
 
 plugins:

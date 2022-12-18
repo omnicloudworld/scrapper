@@ -12,7 +12,7 @@ build:
 
 python:
     install:
-        - requirements: .docs/readthedocs.req
+        - requirements: .docs/.mkdocs.req
 
 search:
     ignore:
