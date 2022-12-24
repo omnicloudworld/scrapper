@@ -4,13 +4,13 @@ MODULES:
     -   skyant.scrapper.catalog
 
 VERSION: 0.0
-MINOR: 2
+MINOR: 1-post1
 
 DESCR: Hi-Level fields.
 KEYWORDS: fields, web scrapping
 
 HOME: https://skyant.dev
-DOCUMENTATION: https://docs.skyant.dev/projects/shell
+DOCUMENTATION: https://docs.skyant.dev/projects/scrapper
 
 AUTHOR: Iurii Tarasenko
 EMAIL: info@skyant.dev
