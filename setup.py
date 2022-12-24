@@ -12,7 +12,7 @@ with open('./setup.yml', 'r', encoding='utf-8') as vars_file:
 
 kwargs = {
     'name': f'{conf["NAMESPACE"].replace(".", "-")}',
-    'version': f'{conf["VERSION"]}.{env.get("BUILD_SUFFIX", "")}{conf["MINOR"]}',
+    'version': f'{conf["VERSION"]}.{env.get("BUILD_SUFFIX", "")}{conf.get("MINOR", "0")}',
     'author': conf['AUTHOR'],
     'author_email': conf['EMAIL'],
     'description': conf['DESCR'],
@@ -38,7 +38,7 @@ if Path('README.md').is_file():
         kwargs['long_description'] = long_description
 
 
-def add_urls(key: str, alias: str | None = None) -> None:
+def add_urls(key: str, alias: str = None) -> None:
     '''
     Check env.yml & add value to project_urls.
     '''
@@ -53,8 +53,6 @@ def add_urls(key: str, alias: str | None = None) -> None:
         kwargs['project_urls'][name] = conf[key]
 
 
-add_urls('DONATE', 'Donation')
-add_urls('NEWS', 'Project news')
-add_urls('TALK', 'Talk to us')
+add_urls('DOCUMENTATION', 'Documentation')
 
 setup(**kwargs)

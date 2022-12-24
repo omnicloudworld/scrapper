@@ -16,7 +16,6 @@ repo_name: skyant/python/scrapper
 
 
 
-
 ###
 #  Template
 ###
@@ -29,7 +28,7 @@ edit_uri: ""
 extra:
 
     generator: true
-    homepage: https://skyant.dev
+    homepage: https://docs.skyant.dev
     analytics:
         provider: google
         property: G-1R41YK6WT2
@@ -61,8 +60,8 @@ theme:
         primary: amber
         accent: deep purple
     font:
-        text: Montserrat
-        code: Roboto Mono
+        text: Comfortaa
+        code: Montserrat
     icon:
         repo: fontawesome/brands/gitlab
     features:
