@@ -1,3 +1,11 @@
+<br/>
+
+> **Note**
+> 
+> **This project is under migration from the prototype [SkyANT](https://gitlab.com/skyant/python/scrapper).**
+
+<br/>
+
 
 __This package is a part of cloud application framework [SkyANT](https://skyant.dev). For more information please read [the documentation](https://docs.skyant.dev/projects/data).__
 
