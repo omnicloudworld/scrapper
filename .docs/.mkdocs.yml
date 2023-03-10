@@ -10,9 +10,10 @@ nav:
         - 'Fields': 'references/fields.md'
 
 
-site_name: skyant.scrapper
-repo_url: https://gitlab.com/skyant/python/scrapper
-repo_name: skyant/python/scrapper
+site_name: Hi-Level Web Scrapper
+repo_url: https://github.com/omnicloudworld/scrapper
+repo_name: omnicloudworld/scrapper
+
 
 
 
@@ -21,41 +22,37 @@ repo_name: skyant/python/scrapper
 ###
 
 
-docs_dir: .docs
+docs_dir: .
 edit_uri: ""
 
 
 extra:
 
     generator: true
-    homepage: https://docs.skyant.dev
-    analytics:
-        provider: google
-        property: G-1R41YK6WT2
+    homepage: https://docs.omnicloud.world
+    #analytics:
+    #    provider: google
+    #    property: G-1R41YK6WT2
 
     social:
         
         - icon: fontawesome/brands/square-facebook
-          link: https://facebook.com/skyantdev
+          link: https://facebook.com/omnicloudworld
           name: facebook
         
         - icon: fontawesome/brands/linkedin
-          link: https://www.linkedin.com/company/skyantdev
+          link: https://www.linkedin.com/company/omnicloudworld
           name: linkedin
 
-        - icon: fontawesome/brands/square-twitter
-          link: https://twitter.com/skyantdev
-          name: twitter
-
         - icon: fontawesome/solid/house
-          link: https://skyant.dev
+          link: https://omnicloud.world
           name: home
 
 
 theme: 
     name: material
-    favicon: https://static.skyant.dev/common/img/icons/ant-512.drawio.png
-    logo: https://static.skyant.dev/common/img/icons/ant-512.drawio.png
+    favicon: https://static.omnicloud.world/common/img/icons/omni-color02.png
+    logo: https://static.omnicloud.world/common/img/icons/omni.drawio.png
     palette:
         primary: amber
         accent: deep purple
@@ -63,7 +60,7 @@ theme:
         text: Comfortaa
         code: Montserrat
     icon:
-        repo: fontawesome/brands/gitlab
+        repo: fontawesome/brands/github
     features:
         - search.highlight
         - search.suggest
@@ -73,9 +70,10 @@ theme:
 
 
 extra_css:
-    - https://static.skyant.dev/common/css/mkdocs/skyant.css
-    - https://static.skyant.dev/common/css/mkdocs/hide-title.css
-    - https://static.skyant.dev/common/css/mkdocs/hide-versions.css
+    - https://static.omnicloud.world/common/css/mkdocs/main.css
+    - https://static.omnicloud.world/common/css/mkdocs/hide-title.css
+    #- https://static.omnicloud.world/common/css/mkdocs/hide-versions.css
+    - https://static.omnicloud.world/common/css/mkdocs/big-versions.css
 
 
 plugins:
@@ -92,6 +90,7 @@ plugins:
     - section-index
     - glightbox
     - include-markdown
+    - same-dir
 
 
 markdown_extensions:

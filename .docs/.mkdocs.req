@@ -4,6 +4,7 @@ mkdocstrings[python]
 mkdocs-section-index
 mkdocs-include-markdown-plugin
 mkdocs-glightbox
+mkdocs-same-dir
 
 pyyaml
 pyyaml_env_tag
